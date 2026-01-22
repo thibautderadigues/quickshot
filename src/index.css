@@ -1,11 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 body {
   margin: 0;
   background-color: #000;
   color: white;
+  font-family: 'DM Sans', sans-serif;
 }
 
 /* Style personnalisé pour les Sliders (Range Input) */

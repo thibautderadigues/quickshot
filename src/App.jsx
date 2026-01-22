@@ -1,13 +1,14 @@
 import React, { useState, useRef } from 'react';
 import PreviewArea from './components/layout/PreviewArea';
 import RangeSlider from './components/ui/RangeSlider';
+import LandingPage from './components/home/LandingPage'; // Import de la nouvelle page
 
 function App() {
   const [image, setImage] = useState(null);
   const captureRef = useRef(null); 
   
   const [settings, setSettings] = useState({
-    padding: 85, // Correspond maintenant à la TAILLE (Scale) en %
+    padding: 85,
     borderRadius: 20,
     shadow: 60,
     background: 'linear-gradient(to right, #ffafbd, #ffc3a0)',
@@ -28,7 +29,7 @@ function App() {
     try {
         const html2canvas = (await import('html2canvas')).default;
         const canvas = await html2canvas(captureRef.current, {
-            scale: 3, // Export haute qualité
+            scale: 3,
             backgroundColor: null,
             useCORS: true,
         });
@@ -52,6 +53,13 @@ function App() {
     'linear-gradient(120deg, #f6d365 0%, #fda085 100%)',
   ];
 
+  // --- LE SWITCH MAGIQUE ---
+  // Si pas d'image, on affiche la Landing Page qui prend tout l'écran
+  if (!image) {
+    return <LandingPage onImageUpload={handleImageUpload} />;
+  }
+
+  // Si image, on affiche l'interface d'édition
   return (
     <div className="flex h-screen bg-black text-white font-sans overflow-hidden">
       
@@ -66,9 +74,15 @@ function App() {
       {/* Barre latérale */}
       <aside className="w-[340px] bg-black border-l border-white/10 p-6 flex flex-col h-full z-20 overflow-y-auto">
         
-        <div className="mb-8">
-          <h2 className="text-lg font-bold text-white">General Settings</h2>
-          <p className="text-xs text-gray-500 mt-1">Set main settings of your screenshot</p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-bold text-white">Editor</h2>
+            <p className="text-xs text-gray-500 mt-1">Customize your shot</p>
+          </div>
+          {/* Bouton pour revenir à la home (reset) */}
+          <button onClick={() => setImage(null)} className="text-gray-500 hover:text-white text-xs underline">
+            Close
+          </button>
         </div>
 
         <div className="space-y-8 flex-1">
@@ -80,13 +94,10 @@ function App() {
              </button>
           </div>
 
-          {/* SLIDER IMAGE SIZE (anciennement Padding) */}
           <RangeSlider 
             label={<> <span className="w-4 h-4 border border-gray-500 rounded sm:inline-block hidden mr-2"></span> Image Size </>}
             value={settings.padding} 
-            min={40} // Minimum 40% pour ne pas que l'image disparaisse
-            max={100} // Maximum 100% (remplit le cadre)
-            unit="%"
+            min={40} max={100} unit="%"
             onChange={(e) => setSettings({...settings, padding: Number(e.target.value)})}
           />
 
@@ -124,8 +135,7 @@ function App() {
         <div className="mt-6 pt-6 border-t border-white/10">
           <button 
             onClick={handleExport}
-            disabled={!image}
-            className={`w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors ${!image ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
           >
             <span>Export design</span>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
