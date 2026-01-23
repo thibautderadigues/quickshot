@@ -7,6 +7,11 @@ import imageSizeIcon from './assets/image_size.png';
 import borderRadiusIcon from './assets/border_radius.png';
 import shadowIcon from './assets/shadow.png';
 
+// --- IMPORTS DES BACKGROUNDS (Tu peux en ajouter d'autres ici) ---
+import bg1 from './assets/backgrounds/Background_1.png';
+import bg2 from './assets/backgrounds/Background_2.png';
+import bg3 from './assets/backgrounds/Background_3.png';
+import bg4 from './assets/backgrounds/Background_4.png';
 
 // --- COMPOSANT SLIDER ---
 const RangeSlider = ({ label, icon, value, min, max, onChange, unit = '' }) => {
@@ -15,11 +20,8 @@ const RangeSlider = ({ label, icon, value, min, max, onChange, unit = '' }) => {
   return (
     <div className="mb-6"> 
       {/* HEADER : LABEL + VALEUR */}
-      {/* MODIF ICI : mb passé de 9px à 6px (réduit de 3px) */}
       <div className="flex justify-between items-center mb-[6px]">
-        
-        {/* Label + Icone */}
-        {/* MODIF ICI : gap passé de 3 à 1.5 (réduit de moitié) */}
+        {/* Label + Icone : Gap 1.5 (6px) */}
         <div className="flex items-center gap-1.5 text-white/70">
           <div className="">{icon}</div>
           <span style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 300, fontSize: '16px' }}>
@@ -61,11 +63,12 @@ function App() {
   const [selectedImage, setSelectedImage] = useState(null);
   const captureRef = useRef(null);
 
+  // J'ai mis bg1 par défaut pour que tu voies le changement direct
   const [settings, setSettings] = useState({
     padding: 85,
     borderRadius: 20,
     shadow: 60,
-    background: 'linear-gradient(to right, #ffafbd, #ffc3a0)',
+    background: `url(${bg1})`, 
     ratio: 'fit'
   });
 
@@ -82,6 +85,8 @@ function App() {
             scale: 3,
             backgroundColor: null,
             useCORS: true,
+            // Permet de bien capturer les images de fond
+            allowTaint: true, 
         });
         const link = document.createElement('a');
         link.download = 'quickshot.png';
@@ -92,15 +97,16 @@ function App() {
     }
   };
 
+  // LISTE DES BACKGROUNDS DISPONIBLES
   const backgrounds = [
-    'linear-gradient(to right, #ffafbd, #ffc3a0)',
-    'linear-gradient(to right, #2193b0, #6dd5ed)',
-    'linear-gradient(to right, #cc2b5e, #753a88)',
+    `url(${bg1})`,
+    `url(${bg2})`,
+    `url(${bg3})`,
+    `url(${bg4})`,
+    // Tu peux garder quelques couleurs unies ou gradients si tu veux
     '#1f1f22', 
+    'linear-gradient(to right, #cc2b5e, #753a88)',
     '#ffffff',
-    'linear-gradient(to right, #4facfe 0%, #00f2fe 100%)',
-    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    'linear-gradient(120deg, #f6d365 0%, #fda085 100%)',
   ];
 
   if (!selectedImage) {
@@ -151,7 +157,6 @@ function App() {
                     icon={<img src={imageSizeIcon} alt="Size" className="w-[18px] h-[18px] object-contain opacity-70" />}
                   />
 
-                  {/* MODIF ICI : Label changé en Border radius */}
                   <RangeSlider 
                     label="Border radius"
                     value={settings.borderRadius} 
@@ -184,7 +189,11 @@ function App() {
                       key={index}
                       onClick={() => setSettings({...settings, background: bg})}
                       className={`w-full aspect-square rounded-lg border transition-all ${settings.background === bg ? 'border-[#FFAA01] ring-1 ring-[#FFAA01]' : 'border-white/10 hover:border-white/30'}`}
-                      style={{ background: bg }}
+                      style={{ 
+                        background: bg, 
+                        backgroundSize: 'cover', // Pour que la miniature soit jolie
+                        backgroundPosition: 'center'
+                      }}
                     />
                   ))}
                 </div>

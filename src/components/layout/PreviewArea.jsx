@@ -31,14 +31,28 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
 
   const currentRatio = ratios.find(r => r.value === settings.ratio) || ratios[0];
   const r = settings.ratio;
-
   const isTall = ['9/16', '4/5'].includes(r);
   const isWide = ['16/9', '4/3'].includes(r);
   const isSquare = r === '1/1';
   const isFit = r === 'fit';
 
+  // --- CORRECTION MAGIC HERE ---
+  // On sépare la logique : si c'est une URL ou un Gradient, on utilise backgroundImage + cover
+  // Si c'est une couleur (hex), on utilise background tout court
+  const isImageOrGradient = settings.background.includes('url') || settings.background.includes('gradient');
+
+  const backgroundStyle = isImageOrGradient 
+    ? { 
+        backgroundImage: settings.background,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }
+    : { 
+        background: settings.background 
+      };
+
   return (
-    // FOND UNI #141414, SUPPRESSION DU DOT PATTERN
     <div className="flex-1 bg-[#141414] flex flex-col items-center justify-center p-8 relative overflow-hidden">
       
       {/* LOGO */}
@@ -86,15 +100,15 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
         className="relative flex items-center justify-center"
         style={{
           boxSizing: 'border-box',
-          background: settings.background,
-          aspectRatio: isFit ? 'auto' : r,
           
+          // On applique le style corrigé ici
+          ...backgroundStyle,
+          
+          aspectRatio: isFit ? 'auto' : r,
           height: isTall ? '75vh' : (isSquare || isFit ? '70vh' : 'auto'),
           width: isWide ? '50vw' : 'auto',
-          
           maxWidth: '90%',
           maxHeight: '75vh',
-          
           overflow: 'hidden', 
         }}
       >
@@ -110,7 +124,6 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
               maxHeight: '100%',
               objectFit: 'contain', 
               transform: `scale(${settings.padding / 100})`,
-              
               borderRadius: `${settings.borderRadius}px`,
               filter: `drop-shadow(0px 20px 40px rgba(0, 0, 0, ${settings.shadow / 100}))`,
             }}
