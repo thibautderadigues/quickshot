@@ -36,9 +36,7 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
   const isSquare = r === '1/1';
   const isFit = r === 'fit';
 
-  // --- CORRECTION MAGIC HERE ---
-  // On sépare la logique : si c'est une URL ou un Gradient, on utilise backgroundImage + cover
-  // Si c'est une couleur (hex), on utilise background tout court
+  // --- LOGIQUE BACKGROUND ---
   const isImageOrGradient = settings.background.includes('url') || settings.background.includes('gradient');
 
   const backgroundStyle = isImageOrGradient 
@@ -101,9 +99,11 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
         style={{
           boxSizing: 'border-box',
           
-          // On applique le style corrigé ici
           ...backgroundStyle,
           
+          // MODIFICATION ICI : 12px au lieu de 16px
+          borderRadius: '12px', 
+
           aspectRatio: isFit ? 'auto' : r,
           height: isTall ? '75vh' : (isSquare || isFit ? '70vh' : 'auto'),
           width: isWide ? '50vw' : 'auto',

@@ -2,40 +2,53 @@ import React, { useState, useRef } from 'react';
 import LandingPage from './components/home/LandingPage';
 import PreviewArea from './components/layout/PreviewArea';
 
-// --- IMPORTS DES ICONES ---
+// --- IMPORTS DES ICONES UI ---
 import imageSizeIcon from './assets/image_size.png';
 import borderRadiusIcon from './assets/border_radius.png';
 import shadowIcon from './assets/shadow.png';
+import darkIcon from './assets/dark_icon.png';
+import lightIcon from './assets/light_icon.png';
 
-// --- IMPORTS DES BACKGROUNDS (Tu peux en ajouter d'autres ici) ---
-import bg1 from './assets/backgrounds/Background_1.png';
-import bg2 from './assets/backgrounds/Background_2.png';
-import bg3 from './assets/backgrounds/Background_3.png';
-import bg4 from './assets/backgrounds/Background_4.png';
+// --- IMPORTS DES BACKGROUNDS (1 à 9) ---
+// DARK MODE
+import bg1Dark from './assets/backgrounds/Background_1_Dark.png';
+import bg2Dark from './assets/backgrounds/Background_2_Dark.png';
+import bg3Dark from './assets/backgrounds/Background_3_Dark.png';
+import bg4Dark from './assets/backgrounds/Background_4_Dark.png';
+import bg5Dark from './assets/backgrounds/Background_5_Dark.png';
+import bg6Dark from './assets/backgrounds/Background_6_Dark.png';
+import bg7Dark from './assets/backgrounds/Background_7_Dark.png';
+import bg8Dark from './assets/backgrounds/Background_8_Dark.png';
+import bg9Dark from './assets/backgrounds/Background_9_Dark.png';
 
-// --- COMPOSANT SLIDER ---
+// LIGHT MODE
+import bg1Light from './assets/backgrounds/Background_1_Light.png';
+import bg2Light from './assets/backgrounds/Background_2_Light.png';
+import bg3Light from './assets/backgrounds/Background_3_Light.png';
+import bg4Light from './assets/backgrounds/Background_4_Light.png';
+import bg5Light from './assets/backgrounds/Background_5_Light.png';
+import bg6Light from './assets/backgrounds/Background_6_Light.png';
+import bg7Light from './assets/backgrounds/Background_7_Light.png';
+import bg8Light from './assets/backgrounds/Background_8_Light.png';
+import bg9Light from './assets/backgrounds/Background_9_Light.png';
+
+// --- COMPOSANT SLIDER (Inchangé) ---
 const RangeSlider = ({ label, icon, value, min, max, onChange, unit = '' }) => {
   const percentage = ((value - min) / (max - min)) * 100;
 
   return (
     <div className="mb-6"> 
-      {/* HEADER : LABEL + VALEUR */}
       <div className="flex justify-between items-center mb-[6px]">
-        {/* Label + Icone : Gap 1.5 (6px) */}
         <div className="flex items-center gap-1.5 text-white/70">
           <div className="">{icon}</div>
           <span style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 300, fontSize: '16px' }}>
             {label}
           </span>
         </div>
-        
-        {/* Valeur */}
         <span style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 500 }} className="text-white/60 text-[11px]">
           {value}{unit}
         </span>
       </div>
-
-      {/* ZONE DU SLIDER */}
       <div className="relative w-full h-6 flex items-center cursor-pointer group">
         <div className="absolute w-full h-[2px] bg-white/10 rounded-full"></div>
         <div 
@@ -62,30 +75,83 @@ const RangeSlider = ({ label, icon, value, min, max, onChange, unit = '' }) => {
 function App() {
   const [selectedImage, setSelectedImage] = useState(null);
   const captureRef = useRef(null);
+  
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
-  // J'ai mis bg1 par défaut pour que tu voies le changement direct
+  // LISTES DES BACKGROUNDS (9 items)
+  const darkBackgrounds = [
+    `url(${bg1Dark})`,
+    `url(${bg2Dark})`,
+    `url(${bg3Dark})`,
+    `url(${bg4Dark})`,
+    `url(${bg5Dark})`,
+    `url(${bg6Dark})`,
+    `url(${bg7Dark})`,
+    `url(${bg8Dark})`,
+    `url(${bg9Dark})`,
+  ];
+
+  const lightBackgrounds = [
+    `url(${bg1Light})`,
+    `url(${bg2Light})`,
+    `url(${bg3Light})`,
+    `url(${bg4Light})`,
+    `url(${bg5Light})`,
+    `url(${bg6Light})`,
+    `url(${bg7Light})`,
+    `url(${bg8Light})`,
+    `url(${bg9Light})`,
+  ];
+
   const [settings, setSettings] = useState({
     padding: 85,
     borderRadius: 20,
     shadow: 60,
-    background: `url(${bg1})`, 
+    background: darkBackgrounds[0], 
     ratio: 'fit'
   });
+
+  // FONCTION DE BASCULE THEME
+  const setMode = (mode) => {
+    if ((mode === 'dark' && isDarkMode) || (mode === 'light' && !isDarkMode)) return;
+
+    const newIsDark = mode === 'dark';
+    setIsDarkMode(newIsDark);
+    
+    const currentList = isDarkMode ? darkBackgrounds : lightBackgrounds;
+    const targetList = newIsDark ? darkBackgrounds : lightBackgrounds;
+    const currentIndex = currentList.indexOf(settings.background);
+
+    if (currentIndex !== -1) {
+      setSettings({ ...settings, background: targetList[currentIndex] });
+    } else {
+      setSettings({ ...settings, background: targetList[0] });
+    }
+  };
+
+  const activeBackgrounds = isDarkMode ? darkBackgrounds : lightBackgrounds;
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) setSelectedImage(file);
   };
 
+  // --- EXPORT FUNCTION ---
   const handleExport = async () => {
     if (!captureRef.current) return;
+
+    const element = captureRef.current;
+    const originalRadius = element.style.borderRadius;
+
+    // Radius à 0 pour l'export (coins carrés)
+    element.style.borderRadius = '0px';
+
     try {
         const html2canvas = (await import('html2canvas')).default;
-        const canvas = await html2canvas(captureRef.current, {
+        const canvas = await html2canvas(element, {
             scale: 3,
             backgroundColor: null,
             useCORS: true,
-            // Permet de bien capturer les images de fond
             allowTaint: true, 
         });
         const link = document.createElement('a');
@@ -94,20 +160,10 @@ function App() {
         link.click();
     } catch (error) {
         console.error("Export failed:", error);
+    } finally {
+        element.style.borderRadius = originalRadius;
     }
   };
-
-  // LISTE DES BACKGROUNDS DISPONIBLES
-  const backgrounds = [
-    `url(${bg1})`,
-    `url(${bg2})`,
-    `url(${bg3})`,
-    `url(${bg4})`,
-    // Tu peux garder quelques couleurs unies ou gradients si tu veux
-    '#1f1f22', 
-    'linear-gradient(to right, #cc2b5e, #753a88)',
-    '#ffffff',
-  ];
 
   if (!selectedImage) {
     return <LandingPage onImageUpload={handleImageUpload} />;
@@ -180,22 +236,73 @@ function App() {
                      Background style
                    </h3>
                    <p style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 400, fontSize: '13px', color: 'rgba(255, 255, 255, 0.4)' }}>
-                     Choose the style of the background
+                     Choose the style
                    </p>
                 </div>
-                <div className="grid grid-cols-4 gap-3">
-                  {backgrounds.map((bg, index) => (
+
+                {/* --- TOGGLE --- */}
+                <div className="mb-4 flex bg-white/5 p-1 rounded-lg border border-white/10">
                     <button 
-                      key={index}
-                      onClick={() => setSettings({...settings, background: bg})}
-                      className={`w-full aspect-square rounded-lg border transition-all ${settings.background === bg ? 'border-[#FFAA01] ring-1 ring-[#FFAA01]' : 'border-white/10 hover:border-white/30'}`}
-                      style={{ 
-                        background: bg, 
-                        backgroundSize: 'cover', // Pour que la miniature soit jolie
-                        backgroundPosition: 'center'
-                      }}
-                    />
-                  ))}
+                        onClick={() => setMode('light')}
+                        className={`flex-1 flex items-center justify-center gap-2 py-1.5 rounded-md transition-all ${
+                            !isDarkMode 
+                            ? 'bg-white/10 text-white shadow-sm' 
+                            : 'text-white/40 hover:text-white/60'
+                        }`}
+                    >
+                        <img src={lightIcon} alt="Light" className={`w-4 h-4 object-contain ${!isDarkMode ? 'opacity-100' : 'opacity-50'}`} />
+                        <span style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 400, fontSize: '13px' }}>
+                            Light
+                        </span>
+                    </button>
+
+                    <button 
+                        onClick={() => setMode('dark')}
+                        className={`flex-1 flex items-center justify-center gap-2 py-1.5 rounded-md transition-all ${
+                            isDarkMode 
+                            ? 'bg-white/10 text-white shadow-sm' 
+                            : 'text-white/40 hover:text-white/60'
+                        }`}
+                    >
+                        <img src={darkIcon} alt="Dark" className={`w-4 h-4 object-contain ${isDarkMode ? 'opacity-100' : 'opacity-50'}`} />
+                        <span style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 400, fontSize: '13px' }}>
+                            Dark
+                        </span>
+                    </button>
+                </div>
+                
+                {/* --- GRILLE 5 colonnes --- */}
+                <div className="grid grid-cols-5 gap-2">
+                  {activeBackgrounds.map((bg, index) => {
+                    const imgUrl = bg.match(/url\(([^)]+)\)/)?.[1]?.replace(/['"]/g, '');
+                    const isSelected = settings.background === bg;
+
+                    return (
+                      <button 
+                        key={index}
+                        onClick={() => setSettings({...settings, background: bg})}
+                        className="relative w-full aspect-square rounded-lg overflow-hidden group"
+                      >
+                        {imgUrl ? (
+                           <img 
+                             src={imgUrl} 
+                             alt="bg" 
+                             className="w-full h-full object-cover"
+                           />
+                        ) : (
+                           <div className="w-full h-full" style={{ background: bg }}></div>
+                        )}
+
+                        <div 
+                          className={`absolute inset-0 rounded-lg border-[2px] transition-all pointer-events-none ${
+                            isSelected 
+                              ? 'border-[#FFAA01]' 
+                              : 'border-transparent group-hover:border-white/30'
+                          }`}
+                        />
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
           </div>
