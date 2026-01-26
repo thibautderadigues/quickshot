@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../../assets/Logo.png';
+import logo from '../../assets/Logo.png'; 
 
 const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
   const [showRatioMenu, setShowRatioMenu] = useState(false);
@@ -36,7 +36,6 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
   const isSquare = r === '1/1';
   const isFit = r === 'fit';
 
-  // --- LOGIQUE BACKGROUND ---
   const isImageOrGradient = settings.background.includes('url') || settings.background.includes('gradient');
 
   const backgroundStyle = isImageOrGradient 
@@ -92,18 +91,15 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
         )}
       </div>
 
-      {/* --- FRAME (CADRE) --- */}
+      {/* --- FRAME PRINCIPALE --- */}
       <div 
+        id="export-frame"
         ref={captureRef}
         className="relative flex items-center justify-center"
         style={{
           boxSizing: 'border-box',
-          
           ...backgroundStyle,
-          
-          // MODIFICATION ICI : 12px au lieu de 16px
           borderRadius: '12px', 
-
           aspectRatio: isFit ? 'auto' : r,
           height: isTall ? '75vh' : (isSquare || isFit ? '70vh' : 'auto'),
           width: isWide ? '50vw' : 'auto',
@@ -113,21 +109,31 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
         }}
       >
         {previewUrl ? (
-          <img 
-            src={previewUrl} 
-            alt="Preview" 
-            className="block"
-            style={{
-              width: 'auto',
-              height: 'auto',
-              maxWidth: '100%',
-              maxHeight: '100%',
-              objectFit: 'contain', 
-              transform: `scale(${settings.padding / 100})`,
-              borderRadius: `${settings.borderRadius}px`,
-              filter: `drop-shadow(0px 20px 40px rgba(0, 0, 0, ${settings.shadow / 100}))`,
-            }}
-          />
+          <div 
+             style={{
+                transform: `scale(${settings.padding / 100})`,
+                filter: `drop-shadow(0px 20px 40px rgba(0, 0, 0, ${settings.shadow / 100}))`,
+                display: 'flex', 
+                // ZÉRO TRANSITION ICI POUR EVITER LE LAG !
+             }}
+          >
+              <div 
+                style={{
+                  borderRadius: `${settings.borderRadius}px`,
+                  overflow: 'hidden', 
+                }}
+              >
+                  <img 
+                    src={previewUrl} 
+                    alt="Preview" 
+                    style={{
+                      display: 'block',
+                      maxWidth: '100%',
+                      maxHeight: '100%',
+                    }}
+                  />
+              </div>
+          </div>
         ) : (
           <div className="text-white/20">No image loaded</div>
         )}
