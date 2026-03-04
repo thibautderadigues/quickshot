@@ -1,5 +1,5 @@
 import sharp from 'sharp';
-import { readdir, stat } from 'fs/promises';
+import { readdir, stat, unlink } from 'fs/promises';
 import { join, extname, basename } from 'path';
 
 const DIRS = [
@@ -29,11 +29,14 @@ async function convertDir(dir) {
     return;
   }
 
-  const pngs = files.filter(f => extname(f).toLowerCase() === '.png');
+  const pngs = files.filter(f => ['.png', '.jpg', '.jpeg'].includes(extname(f).toLowerCase()));
 
   for (const file of pngs) {
     const inputPath = join(dir, file);
-    const outputPath = join(dir, basename(file, '.png') + '.webp');
+    const ext = extname(file);
+    const rawName = basename(file, ext);
+    const safeName = rawName.replace(/[^a-zA-Z0-9._-]/g, '_').replace(/_+/g, '_');
+    const outputPath = join(dir, safeName + '.webp');
 
     const info = await stat(inputPath);
     const sizeMB = (info.size / 1024 / 1024).toFixed(2);
@@ -46,7 +49,8 @@ async function convertDir(dir) {
     const outSizeMB = (outInfo.size / 1024 / 1024).toFixed(2);
     const reduction = ((1 - outInfo.size / info.size) * 100).toFixed(0);
 
-    console.log(`${file} → ${basename(outputPath)}  |  ${sizeMB}MB → ${outSizeMB}MB  (-${reduction}%)`);
+    console.log(`${file} → ${basename(outputPath)}  |  ${sizeMB}MB → ${outSizeMB}MB  (-${reduction}%) — PNG deleted`);
+    await unlink(inputPath);
   }
 }
 

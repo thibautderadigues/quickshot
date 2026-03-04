@@ -6,15 +6,9 @@ import PreviewArea from './components/layout/PreviewArea';
 import imageSizeIcon from './assets/image_size.webp';
 import borderRadiusIcon from './assets/border_radius.webp';
 import shadowIcon from './assets/shadow.webp';
-import bg1 from './assets/backgrounds/Background_1.webp';
-import bg2 from './assets/backgrounds/Background_2.webp';
-import bg3 from './assets/backgrounds/Background_3.webp';
-import bg4 from './assets/backgrounds/Background_4.webp';
 
-import bg1Thumb from './assets/thumbnails/Background_1.webp';
-import bg2Thumb from './assets/thumbnails/Background_2.webp';
-import bg3Thumb from './assets/thumbnails/Background_3.webp';
-import bg4Thumb from './assets/thumbnails/Background_4.webp';
+const bgModules = import.meta.glob('./assets/backgrounds/*.webp', { eager: true });
+const thumbModules = import.meta.glob('./assets/thumbnails/*.webp', { eager: true });
 
 const RangeSlider = ({ label, icon, value, min, max, onChange, unit = '' }) => {
   const percentage = ((value - min) / (max - min)) * 100;
@@ -40,12 +34,17 @@ const RangeSlider = ({ label, icon, value, min, max, onChange, unit = '' }) => {
 function App() {
   const [selectedImage, setSelectedImage] = useState(null);
   const captureRef = useRef(null);
-  const backgrounds = [
-    { full: `url(${bg1})`, thumb: bg1Thumb },
-    { full: `url(${bg2})`, thumb: bg2Thumb },
-    { full: `url(${bg3})`, thumb: bg3Thumb },
-    { full: `url(${bg4})`, thumb: bg4Thumb },
-  ];
+  const backgrounds = Object.keys(bgModules)
+    .sort()
+    .map((bgPath) => {
+      const filename = bgPath.split('/').pop();
+      const thumbPath = `./assets/thumbnails/${filename}`;
+      return {
+        full: `url(${bgModules[bgPath].default})`,
+        thumb: thumbModules[thumbPath]?.default,
+      };
+    })
+    .filter(item => item.thumb);
 
   const [settings, setSettings] = useState({
     padding: 85,
