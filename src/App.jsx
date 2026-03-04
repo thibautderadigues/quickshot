@@ -3,18 +3,18 @@ import { toPng } from 'html-to-image';
 import LandingPage from './components/home/LandingPage';
 import PreviewArea from './components/layout/PreviewArea';
 
-import imageSizeIcon from './assets/image_size.png';
-import borderRadiusIcon from './assets/border_radius.png';
-import shadowIcon from './assets/shadow.png';
-import bg1 from './assets/backgrounds/Background_1.png';
-import bg2 from './assets/backgrounds/Background_2.png';
-import bg3 from './assets/backgrounds/Background_3.png';
-import bg4 from './assets/backgrounds/Background_4.png';
+import imageSizeIcon from './assets/image_size.webp';
+import borderRadiusIcon from './assets/border_radius.webp';
+import shadowIcon from './assets/shadow.webp';
+import bg1 from './assets/backgrounds/Background_1.webp';
+import bg2 from './assets/backgrounds/Background_2.webp';
+import bg3 from './assets/backgrounds/Background_3.webp';
+import bg4 from './assets/backgrounds/Background_4.webp';
 
-import bg1Thumb from './assets/thumbnails/Background_1.png';
-import bg2Thumb from './assets/thumbnails/Background_2.png';
-import bg3Thumb from './assets/thumbnails/Background_3.png';
-import bg4Thumb from './assets/thumbnails/Background_4.png';
+import bg1Thumb from './assets/thumbnails/Background_1.webp';
+import bg2Thumb from './assets/thumbnails/Background_2.webp';
+import bg3Thumb from './assets/thumbnails/Background_3.webp';
+import bg4Thumb from './assets/thumbnails/Background_4.webp';
 
 const RangeSlider = ({ label, icon, value, min, max, onChange, unit = '' }) => {
   const percentage = ((value - min) / (max - min)) * 100;

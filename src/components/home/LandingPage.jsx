@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import logo from '../../assets/Logo.png';
-import fileLeft from '../../assets/file-left.png';
-import fileRight from '../../assets/file-right.png';
-import backgroundImg from '../../assets/background.png';
+import logo from '../../assets/Logo.webp';
+import fileLeft from '../../assets/file-left.webp';
+import fileRight from '../../assets/file-right.webp';
+import backgroundImg from '../../assets/background.webp';
 
 const LandingPage = ({ onImageUpload }) => {
   const fileInputRef = useRef(null);

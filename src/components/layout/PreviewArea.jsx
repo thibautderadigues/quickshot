@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../../assets/Logo.png'; 
+import logo from '../../assets/Logo.webp'; 
 
 const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
   const [showRatioMenu, setShowRatioMenu] = useState(false);
