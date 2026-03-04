@@ -223,7 +223,7 @@ const LandingPage = ({ onImageUpload }) => {
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
                             <button 
                                 onClick={handleButtonClick}
-                                className="flex items-center gap-2 text-black bg-[#FFAA01] px-[18px] py-[12px] rounded-[9px] transition-transform duration-500 transform active:scale-95 group-hover:scale-[1.02] shadow-lg shadow-black/60 cursor-pointer"
+                                className="flex items-center gap-2 text-black bg-[#FFAA01] px-[18px] py-[12px] rounded-full transition-transform duration-500 transform active:scale-95 group-hover:scale-[1.02] shadow-lg shadow-black/60 cursor-pointer"
                             >
                                 <span style={{ fontFamily: styles.fonts.title, fontWeight: 600, fontSize: '16px' }}>
                                     Upload image
