@@ -3,54 +3,18 @@ import { toPng } from 'html-to-image';
 import LandingPage from './components/home/LandingPage';
 import PreviewArea from './components/layout/PreviewArea';
 
-// --- IMPORTS DES ICONES UI ---
 import imageSizeIcon from './assets/image_size.png';
 import borderRadiusIcon from './assets/border_radius.png';
 import shadowIcon from './assets/shadow.png';
-import darkIcon from './assets/dark_icon.png';
-import lightIcon from './assets/light_icon.png';
+import bg1 from './assets/backgrounds/Background_1.png';
+import bg2 from './assets/backgrounds/Background_2.png';
+import bg3 from './assets/backgrounds/Background_3.png';
+import bg4 from './assets/backgrounds/Background_4.png';
 
-// --- IMPORTS BACKGROUNDS (HD) ---
-import bg1Dark from './assets/backgrounds/Background_1_Dark.png';
-import bg2Dark from './assets/backgrounds/Background_2_Dark.png';
-import bg3Dark from './assets/backgrounds/Background_3_Dark.png';
-import bg4Dark from './assets/backgrounds/Background_4_Dark.png';
-import bg5Dark from './assets/backgrounds/Background_5_Dark.png';
-import bg6Dark from './assets/backgrounds/Background_6_Dark.png';
-import bg7Dark from './assets/backgrounds/Background_7_Dark.png';
-import bg8Dark from './assets/backgrounds/Background_8_Dark.png';
-import bg9Dark from './assets/backgrounds/Background_9_Dark.png';
-
-import bg1Light from './assets/backgrounds/Background_1_Light.png';
-import bg2Light from './assets/backgrounds/Background_2_Light.png';
-import bg3Light from './assets/backgrounds/Background_3_Light.png';
-import bg4Light from './assets/backgrounds/Background_4_Light.png';
-import bg5Light from './assets/backgrounds/Background_5_Light.png';
-import bg6Light from './assets/backgrounds/Background_6_Light.png';
-import bg7Light from './assets/backgrounds/Background_7_Light.png';
-import bg8Light from './assets/backgrounds/Background_8_Light.png';
-import bg9Light from './assets/backgrounds/Background_9_Light.png';
-
-// --- IMPORTS THUMBNAILS ---
-import bg1DarkThumb from './assets/thumbnails/Background_1_Dark.png';
-import bg2DarkThumb from './assets/thumbnails/Background_2_Dark.png';
-import bg3DarkThumb from './assets/thumbnails/Background_3_Dark.png';
-import bg4DarkThumb from './assets/thumbnails/Background_4_Dark.png';
-import bg5DarkThumb from './assets/thumbnails/Background_5_Dark.png';
-import bg6DarkThumb from './assets/thumbnails/Background_6_Dark.png';
-import bg7DarkThumb from './assets/thumbnails/Background_7_Dark.png';
-import bg8DarkThumb from './assets/thumbnails/Background_8_Dark.png';
-import bg9DarkThumb from './assets/thumbnails/Background_9_Dark.png';
-
-import bg1LightThumb from './assets/thumbnails/Background_1_Light.png';
-import bg2LightThumb from './assets/thumbnails/Background_2_Light.png';
-import bg3LightThumb from './assets/thumbnails/Background_3_Light.png';
-import bg4LightThumb from './assets/thumbnails/Background_4_Light.png';
-import bg5LightThumb from './assets/thumbnails/Background_5_Light.png';
-import bg6LightThumb from './assets/thumbnails/Background_6_Light.png';
-import bg7LightThumb from './assets/thumbnails/Background_7_Light.png';
-import bg8LightThumb from './assets/thumbnails/Background_8_Light.png';
-import bg9LightThumb from './assets/thumbnails/Background_9_Light.png';
+import bg1Thumb from './assets/thumbnails/Background_1.png';
+import bg2Thumb from './assets/thumbnails/Background_2.png';
+import bg3Thumb from './assets/thumbnails/Background_3.png';
+import bg4Thumb from './assets/thumbnails/Background_4.png';
 
 const RangeSlider = ({ label, icon, value, min, max, onChange, unit = '' }) => {
   const percentage = ((value - min) / (max - min)) * 100;
@@ -76,62 +40,27 @@ const RangeSlider = ({ label, icon, value, min, max, onChange, unit = '' }) => {
 function App() {
   const [selectedImage, setSelectedImage] = useState(null);
   const captureRef = useRef(null);
-  const [isDarkMode, setIsDarkMode] = useState(true);
-
-  const darkCollection = [
-    { full: `url(${bg1Dark})`, thumb: bg1DarkThumb },
-    { full: `url(${bg2Dark})`, thumb: bg2DarkThumb },
-    { full: `url(${bg3Dark})`, thumb: bg3DarkThumb },
-    { full: `url(${bg4Dark})`, thumb: bg4DarkThumb },
-    { full: `url(${bg5Dark})`, thumb: bg5DarkThumb },
-    { full: `url(${bg6Dark})`, thumb: bg6DarkThumb },
-    { full: `url(${bg7Dark})`, thumb: bg7DarkThumb },
-    { full: `url(${bg8Dark})`, thumb: bg8DarkThumb },
-    { full: `url(${bg9Dark})`, thumb: bg9DarkThumb },
-  ];
-
-  const lightCollection = [
-    { full: `url(${bg1Light})`, thumb: bg1LightThumb },
-    { full: `url(${bg2Light})`, thumb: bg2LightThumb },
-    { full: `url(${bg3Light})`, thumb: bg3LightThumb },
-    { full: `url(${bg4Light})`, thumb: bg4LightThumb },
-    { full: `url(${bg5Light})`, thumb: bg5LightThumb },
-    { full: `url(${bg6Light})`, thumb: bg6LightThumb },
-    { full: `url(${bg7Light})`, thumb: bg7LightThumb },
-    { full: `url(${bg8Light})`, thumb: bg8LightThumb },
-    { full: `url(${bg9Light})`, thumb: bg9LightThumb },
+  const backgrounds = [
+    { full: `url(${bg1})`, thumb: bg1Thumb },
+    { full: `url(${bg2})`, thumb: bg2Thumb },
+    { full: `url(${bg3})`, thumb: bg3Thumb },
+    { full: `url(${bg4})`, thumb: bg4Thumb },
   ];
 
   const [settings, setSettings] = useState({
     padding: 85,
     borderRadius: 20,
     shadow: 60,
-    background: darkCollection[0].full,
+    background: backgrounds[0].full,
     ratio: 'fit'
   });
-
-  const activeCollection = isDarkMode ? darkCollection : lightCollection;
-
-  const setMode = (mode) => {
-    if ((mode === 'dark' && isDarkMode) || (mode === 'light' && !isDarkMode)) return;
-    const newIsDark = mode === 'dark';
-    setIsDarkMode(newIsDark);
-    const currentList = isDarkMode ? darkCollection : lightCollection;
-    const targetList = newIsDark ? darkCollection : lightCollection;
-    const currentIndex = currentList.findIndex(item => item.full === settings.background);
-    if (currentIndex !== -1) {
-      setSettings({ ...settings, background: targetList[currentIndex].full });
-    } else {
-      setSettings({ ...settings, background: targetList[0].full });
-    }
-  };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) setSelectedImage(file);
   };
 
-  // --- EXPORT PIXEL PERFECT ---
+  // --- EXPORT PIXEL PERFECT (Ta version qui marche) ---
   const handleExport = async () => {
     let element = captureRef.current;
     if (!element) {
@@ -144,32 +73,24 @@ function App() {
     }
 
     try {
-        // 1. On capture la taille affichée EXACTE (sans les bordures/scrollbars)
         const exactWidth = element.clientWidth;
         const exactHeight = element.clientHeight;
 
         const dataUrl = await toPng(element, {
             cacheBust: false,
             skipFonts: true,
-            pixelRatio: 4, // Qualité HD
+            pixelRatio: 4, 
             backgroundColor: null,
-            
-            // 2. On impose cette taille à l'outil de capture
             width: exactWidth,
             height: exactHeight,
-
-            // 3. On force le style de l'élément cloné
             style: { 
-                borderRadius: '0px', // Coins carrés externes
+                borderRadius: '0px', 
                 margin: '0', 
                 padding: '0',
-                transform: 'none', // Pas de scale externe
-                
-                // C'EST ICI LE SECRET :
-                // On dit à l'élément cloné : "Oublie ton 50vw, prends 100% de la largeur que je t'ai donnée"
+                transform: 'none', 
                 width: '100%',
                 height: '100%',
-                minWidth: '100%', // Sécurité
+                minWidth: '100%', 
                 minHeight: '100%',
                 maxWidth: 'none',
                 maxHeight: 'none',
@@ -192,9 +113,27 @@ function App() {
   }
 
   return (
-    <div className="h-screen w-full bg-[#000000] flex font-sans text-white overflow-hidden">
-      <PreviewArea settings={settings} image={selectedImage} onUpdateSettings={setSettings} captureRef={captureRef} />
-      <aside className="w-[340px] bg-[#000000] border-l border-white/20 flex flex-col z-20 shrink-0 h-full">
+    // LAYOUT RESPONSIVE & STICKY LOGIC
+    // - min-h-screen : Permet le scroll sur mobile
+    // - md:overflow-hidden : Bloque le scroll général sur desktop (app feel)
+    <div className="min-h-screen md:h-screen w-full bg-[#000000] flex flex-col md:flex-row font-sans text-white md:overflow-hidden">
+      
+      {/* PREVIEW AREA (STICKY)
+          - sticky top-0 z-0 : Colle en haut, en arrière-plan
+          - h-[45vh] : Prend un peu moins de la moitié sur mobile pour inciter au scroll
+          - md:relative md:h-full : Redevient normal sur desktop
+      */}
+      <div className="sticky top-0 z-0 w-full h-[45vh] md:relative md:h-full md:flex-1 bg-[#141414]">
+         <PreviewArea settings={settings} image={selectedImage} onUpdateSettings={setSettings} captureRef={captureRef} />
+      </div>
+
+      {/* SIDEBAR (SCROLL OVER)
+          - relative z-10 : Passe PAR-DESSUS la preview sticky
+          - bg-[#000000] : Opaque pour cacher l'image en dessous
+          - min-h-[55vh] : Taille min pour scroller
+      */}
+      <aside className="relative z-10 w-full md:w-[340px] bg-[#000000] border-t md:border-t-0 md:border-l border-white/20 flex flex-col shrink-0 min-h-[55vh] md:h-full">
+          
           <div className="px-6 pt-8 pb-6 flex items-start justify-between">
               <div className="flex flex-col gap-[2px]">
                   <h2 style={{ fontFamily: '"Neue Regrade", sans-serif', fontWeight: 600, fontSize: '18px', color: '#FFFFFF' }}>General settings</h2>
@@ -204,29 +143,22 @@ function App() {
                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M1 13L13 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
           </div>
-          <div className="flex-1 overflow-y-auto px-6 py-2">
+
+          <div className="flex-1 px-6 py-2 md:overflow-y-auto">
               <div>
                   <RangeSlider label="Image Size" value={settings.padding} min={40} max={100} unit="%" onChange={(val) => setSettings({...settings, padding: val})} icon={<img src={imageSizeIcon} alt="Size" className="w-[18px] h-[18px] object-contain opacity-70" />} />
                   <RangeSlider label="Border radius" value={settings.borderRadius} min={0} max={50} unit="px" onChange={(val) => setSettings({...settings, borderRadius: val})} icon={<img src={borderRadiusIcon} alt="Radius" className="w-[18px] h-[18px] object-contain opacity-70" />} />
                   <RangeSlider label="Shadow" value={settings.shadow} min={0} max={100} unit="%" onChange={(val) => setSettings({...settings, shadow: val})} icon={<img src={shadowIcon} alt="Shadow" className="w-[18px] h-[18px] object-contain opacity-70" />} />
               </div>
+              
               <div className="mt-[40px]">
                 <div className="mb-4 flex flex-col gap-[2px]">
                    <h3 style={{ fontFamily: '"Neue Regrade", sans-serif', fontWeight: 600, fontSize: '18px', color: '#FFFFFF' }}>Background style</h3>
                    <p style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 400, fontSize: '13px', color: 'rgba(255, 255, 255, 0.4)' }}>Choose the style</p>
                 </div>
-                <div className="mb-4 flex bg-white/5 p-1 rounded-lg border border-white/10">
-                    <button onClick={() => setMode('light')} className={`flex-1 flex items-center justify-center gap-2 py-1.5 rounded-md transition-all ${!isDarkMode ? 'bg-white/10 text-white shadow-sm' : 'text-white/40 hover:text-white/60'}`}>
-                        <img src={lightIcon} alt="Light" className={`w-4 h-4 object-contain ${!isDarkMode ? 'opacity-100' : 'opacity-50'}`} />
-                        <span style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 400, fontSize: '13px' }}>Light</span>
-                    </button>
-                    <button onClick={() => setMode('dark')} className={`flex-1 flex items-center justify-center gap-2 py-1.5 rounded-md transition-all ${isDarkMode ? 'bg-white/10 text-white shadow-sm' : 'text-white/40 hover:text-white/60'}`}>
-                        <img src={darkIcon} alt="Dark" className={`w-4 h-4 object-contain ${isDarkMode ? 'opacity-100' : 'opacity-50'}`} />
-                        <span style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 400, fontSize: '13px' }}>Dark</span>
-                    </button>
-                </div>
-                <div className="grid grid-cols-5 gap-2">
-                  {activeCollection.map((item, index) => {
+                
+                <div className="grid grid-cols-4 gap-2">
+                  {backgrounds.map((item, index) => {
                     const isSelected = settings.background === item.full;
                     return (
                       <button key={index} onClick={() => setSettings({...settings, background: item.full})} className="relative w-full aspect-square rounded-lg overflow-hidden group">
@@ -238,6 +170,7 @@ function App() {
                 </div>
               </div>
           </div>
+          
           <div className="p-6 bg-[#000000]"> 
             <button onClick={handleExport} className="w-full bg-[#FFAA01] hover:bg-[#ffb92e] text-black h-[48px] rounded-[9px] flex items-center justify-center gap-2 transition-colors shadow-lg shadow-orange-500/20" style={{ fontFamily: '"Neue Regrade", sans-serif', fontWeight: 600, fontSize: '16px' }}>
               <span>Export design</span>

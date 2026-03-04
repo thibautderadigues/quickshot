@@ -4,11 +4,20 @@ import logo from '../../assets/Logo.png';
 const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
   const [showRatioMenu, setShowRatioMenu] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [naturalSize, setNaturalSize] = useState(null);
 
   useEffect(() => {
     if (image) {
       const url = typeof image === 'string' ? image : URL.createObjectURL(image);
       setPreviewUrl(url);
+      setNaturalSize(null);
+
+      const imgEl = new window.Image();
+      imgEl.onload = () => {
+        setNaturalSize({ width: imgEl.naturalWidth, height: imgEl.naturalHeight });
+      };
+      imgEl.src = url;
+
       return () => {
         if (typeof image !== 'string') URL.revokeObjectURL(url);
       };
@@ -36,6 +45,9 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
   const isSquare = r === '1/1';
   const isFit = r === 'fit';
 
+  const isImageWide = isFit && naturalSize && (naturalSize.width / naturalSize.height) >= 1;
+  const isImageTall = isFit && naturalSize && (naturalSize.width / naturalSize.height) < 1;
+
   const isImageOrGradient = settings.background.includes('url') || settings.background.includes('gradient');
 
   const backgroundStyle = isImageOrGradient 
@@ -50,26 +62,27 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
       };
 
   return (
-    <div className="flex-1 bg-[#141414] flex flex-col items-center justify-center p-8 relative overflow-hidden">
+    // Padding ajusté pour mobile (p-4) et desktop (md:p-8)
+    <div className="w-full h-full flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden">
       
-      {/* LOGO */}
-      <div className="absolute top-8 left-8 z-30 opacity-80">
-        <img src={logo} alt="Logo" className="h-6 w-auto" />
+      {/* LOGO: Caché sur mobile (hidden), affiché sur desktop (md:block) */}
+      <div className="hidden md:block absolute top-4 left-4 md:top-8 md:left-8 z-30 opacity-80">
+        <img src={logo} alt="Logo" className="h-5 md:h-6 w-auto" />
       </div>
       
       {/* RATIO MENU */}
-      <div className="absolute top-8 right-8 z-30">
+      <div className="absolute top-4 right-4 md:top-8 md:right-8 z-30">
         <button 
           onClick={() => setShowRatioMenu(!showRatioMenu)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg transition w-48 justify-between backdrop-blur-sm"
+          className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg transition w-36 md:w-48 justify-between backdrop-blur-sm"
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.05)', 
             border: '1px solid rgba(255, 255, 255, 0.1)',  
           }}
         >
-          <div style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 500, fontSize: '14px', color: '#FFFFFF' }}>
+          <div style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 500, fontSize: '13px', color: '#FFFFFF' }}>
              <span>{currentRatio.name} </span>
-             <span style={{ opacity: 0.4 }}>{currentRatio.sub}</span>
+             <span style={{ opacity: 0.4 }} className="hidden md:inline">{currentRatio.sub}</span>
           </div>
           <svg className={`w-4 h-4 text-white transition-transform ${showRatioMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
         </button>
@@ -99,11 +112,16 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
         style={{
           boxSizing: 'border-box',
           ...backgroundStyle,
-          borderRadius: '12px', 
-          aspectRatio: isFit ? 'auto' : r,
-          height: isTall ? '75vh' : (isSquare || isFit ? '70vh' : 'auto'),
-          width: isWide ? '50vw' : 'auto',
-          maxWidth: '90%',
+          borderRadius: '3px', 
+          aspectRatio: isFit
+            ? (naturalSize ? `${naturalSize.width} / ${naturalSize.height}` : '4 / 3')
+            : r,
+          height: isTall ? '75vh'
+            : isSquare ? '70vh'
+            : (isFit && !isImageWide) ? '70vh'
+            : undefined,
+          width: (isWide || isImageWide) ? '50vw' : undefined,
+          maxWidth: '100%',
           maxHeight: '75vh',
           overflow: 'hidden', 
         }}
@@ -111,16 +129,22 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
         {previewUrl ? (
           <div 
              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 transform: `scale(${settings.padding / 100})`,
                 filter: `drop-shadow(0px 20px 40px rgba(0, 0, 0, ${settings.shadow / 100}))`,
-                display: 'flex', 
-                // ZÉRO TRANSITION ICI POUR EVITER LE LAG !
              }}
           >
               <div 
                 style={{
                   borderRadius: `${settings.borderRadius}px`,
                   overflow: 'hidden', 
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                  display: 'flex',
                 }}
               >
                   <img 
