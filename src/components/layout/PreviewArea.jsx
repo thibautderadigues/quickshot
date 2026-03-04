@@ -138,25 +138,16 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
                 filter: `drop-shadow(0px 20px 40px rgba(0, 0, 0, ${settings.shadow / 100}))`,
              }}
           >
-              <div 
+              <img 
+                src={previewUrl} 
+                alt="Preview" 
                 style={{
-                  borderRadius: `${settings.borderRadius}px`,
-                  overflow: 'hidden', 
+                  display: 'block',
                   maxWidth: '100%',
                   maxHeight: '100%',
-                  display: 'flex',
+                  borderRadius: `${settings.borderRadius}px`,
                 }}
-              >
-                  <img 
-                    src={previewUrl} 
-                    alt="Preview" 
-                    style={{
-                      display: 'block',
-                      maxWidth: '100%',
-                      maxHeight: '100%',
-                    }}
-                  />
-              </div>
+              />
           </div>
         ) : (
           <div className="text-white/20">No image loaded</div>
