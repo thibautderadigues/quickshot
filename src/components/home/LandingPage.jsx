@@ -83,8 +83,8 @@ const LandingPage = ({ onImageUpload }) => {
       <div className="w-full min-h-screen md:h-screen md:max-h-[900px] flex flex-col md:flex-row items-stretch font-sans overflow-y-auto md:overflow-hidden bg-[#000000] antialiased">
         
         {/* --- COLONNE GAUCHE --- */}
-        <div className="flex flex-col px-6 pt-14 pb-4 md:px-[50px] md:py-[50px] z-10 shrink-0 border-none relative bg-[#000000]">
-          <div className="shrink-0 mb-8 md:mb-12 self-start">
+        <div className="flex flex-col px-6 pt-8 pb-4 md:px-[50px] md:py-[50px] z-10 shrink-0 border-none relative bg-[#000000]">
+          <div className="shrink-0 mb-12 md:mb-12 self-start">
              <img src={logo} alt="Logo" className="h-5 md:h-6 w-auto" />
           </div>
 
@@ -152,8 +152,8 @@ const LandingPage = ({ onImageUpload }) => {
         </div>
 
         {/* --- COLONNE DROITE --- */}
-        <div className="flex items-start justify-center relative overflow-hidden px-4 pb-10 md:flex-1 md:items-center md:p-8">
-           <div className="absolute inset-0 z-0 pointer-events-none hidden md:block">
+        <div className="flex-1 flex items-start justify-center relative overflow-hidden px-6 pt-[40px] pb-10 md:items-center md:p-8">
+           <div className="absolute inset-0 z-0 pointer-events-none">
               <img src={backgroundImg} alt="" className="w-full h-full object-cover opacity-40" />
            </div>
 

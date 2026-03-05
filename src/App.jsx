@@ -122,7 +122,7 @@ function App() {
           - h-[45vh] : Prend un peu moins de la moitié sur mobile pour inciter au scroll
           - md:relative md:h-full : Redevient normal sur desktop
       */}
-      <div className="sticky top-0 z-0 w-full h-[45vh] md:relative md:h-full md:flex-1 bg-[#141414]">
+      <div className="sticky top-0 z-0 w-full h-[45vh] md:relative md:h-full md:flex-1 bg-[#141414]" style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden', WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}>
          <PreviewArea settings={settings} image={selectedImage} onUpdateSettings={setSettings} captureRef={captureRef} />
       </div>
 
