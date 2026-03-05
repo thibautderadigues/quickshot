@@ -21,10 +21,10 @@ const RangeSlider = ({ label, icon, value, min, max, onChange, unit = '' }) => {
         </div>
         <span style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 500 }} className="text-white/60 text-[11px]">{value}{unit}</span>
       </div>
-      <div className="relative w-full h-6 flex items-center cursor-pointer group">
+      <div className="relative w-full h-10 md:h-6 flex items-center cursor-pointer group">
         <div className="absolute w-full h-[2px] bg-white/10 rounded-full"></div>
         <div className="absolute h-[2px] bg-[#FFAA01] rounded-full" style={{ width: `${percentage}%` }}></div>
-        <div className="absolute h-3.5 w-3.5 bg-[#FFAA01] rounded-full shadow-[0_0_10px_rgba(0,0,0,0.5)] pointer-events-none transition-transform group-hover:scale-110" style={{ left: `calc(${percentage}% - 7px)` }}></div>
+        <div className="absolute h-5 w-5 md:h-3.5 md:w-3.5 bg-[#FFAA01] rounded-full shadow-[0_0_10px_rgba(0,0,0,0.5)] pointer-events-none transition-transform group-hover:scale-110" style={{ left: `${percentage}%`, transform: 'translateX(-50%)' }}></div>
         <input type="range" min={min} max={max} value={value} onChange={(e) => onChange(Number(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 margin-0" />
       </div>
     </div>
@@ -124,6 +124,9 @@ function App() {
       */}
       <div className="sticky top-0 z-0 w-full h-[45vh] md:relative md:h-full md:flex-1 bg-[#141414]" style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden', WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}>
          <PreviewArea settings={settings} image={selectedImage} onUpdateSettings={setSettings} captureRef={captureRef} />
+         <button onClick={() => setSelectedImage(null)} className="md:hidden absolute top-4 left-4 z-30 text-white/40 hover:text-white transition-colors p-2 rounded-xl backdrop-blur-sm" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M1 13L13 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+         </button>
       </div>
 
       {/* SIDEBAR (SCROLL OVER)
@@ -138,7 +141,7 @@ function App() {
                   <h2 style={{ fontFamily: '"Neue Regrade", sans-serif', fontWeight: 600, fontSize: '18px', color: '#FFFFFF' }}>General settings</h2>
                   <p style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 400, fontSize: '13px', color: 'rgba(255, 255, 255, 0.4)' }}>Customize your shot</p>
               </div>
-              <button onClick={() => setSelectedImage(null)} className="text-white/40 hover:text-white transition-colors p-2 -mr-2">
+              <button onClick={() => setSelectedImage(null)} className="hidden md:block text-white/40 hover:text-white transition-colors p-2 -mr-2">
                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M1 13L13 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
           </div>

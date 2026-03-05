@@ -116,18 +116,17 @@ const LandingPage = ({ onImageUpload }) => {
             
             <div className="h-3 md:h-4"></div>
 
-            <p className="text-[13px] md:text-[15px]" style={{
+            <p className="text-[13px] md:text-[15px] max-w-[280px] md:max-w-[430px]" style={{
               fontFamily: styles.fonts.body,
               color: 'rgba(255, 255, 255, 0.5)', 
               fontWeight: 360, 
               lineHeight: '1.4', 
-              maxWidth: '430px',
               width: '100%',
               letterSpacing: '-0.01em', 
             }}>
               Turn your boring screenshots into stunning visuals instantly. 
-              Import, customize, and quickly export high-quality images 
-              for your social media or portfolio.
+              Import, customize, and quickly export<span className="hidden md:inline"> high-quality images 
+              for your social media or portfolio</span>.
             </p>
           </div>
 
@@ -201,7 +200,7 @@ const LandingPage = ({ onImageUpload }) => {
                     </div>
                   ) : (
                     <>
-                        <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-[80%] flex items-center justify-center pointer-events-none z-0">
+                        <div className="absolute top-[38%] md:top-[45%] left-1/2 -translate-x-1/2 -translate-y-[80%] flex items-center justify-center pointer-events-none z-0">
                             <img src={fileLeft} alt="" 
                                 className="relative translate-x-6 translate-y-5 opacity-80 transition-all duration-500 group-hover:translate-y-4 group-hover:-rotate-6 h-[80px] md:h-[120px]" 
                             />

@@ -28,13 +28,12 @@ input[type=range] {
 
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: 16px;
-  width: 16px;
+  height: 44px;
+  width: 44px;
   border-radius: 50%;
-  background: #F59E0B; /* Le jaune/orange */
+  background: transparent;
   cursor: pointer;
-  margin-top: -6px; /* Ajustement vertical */
-  box-shadow: 0 0 0 2px #000; /* Petite bordure noire autour du rond */
+  margin-top: -20px;
 }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
