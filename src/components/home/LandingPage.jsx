@@ -102,7 +102,7 @@ const LandingPage = ({ onImageUpload }) => {
                </span>
             </div>
             
-            <h1 className="text-[28px] md:text-[42px]" style={{ 
+            <h1 className="text-[32px] md:text-[42px]" style={{ 
               fontFamily: styles.fonts.title,
               color: '#FFFFFF',
               fontWeight: 600,
@@ -157,7 +157,7 @@ const LandingPage = ({ onImageUpload }) => {
               <img src={backgroundImg} alt="" className="w-full h-full object-cover opacity-40" />
            </div>
 
-           <div className="relative z-10 bg-[#000000] border border-white/10 rounded-[20px] md:rounded-[24px] p-2.5 md:p-[14px] shadow-2xl w-full max-w-[488px]">
+           <div className="relative z-10 bg-[#000000] border border-white/10 rounded-[14px] md:rounded-[24px] p-2.5 md:p-[14px] shadow-2xl w-full max-w-[488px]">
               
               <div className="w-full min-h-[220px] md:min-h-[310px] bg-white/[0.04] rounded-[8px] relative overflow-hidden group px-5 py-6 md:px-[40px] md:py-[46px] flex flex-col items-center justify-center">
                   

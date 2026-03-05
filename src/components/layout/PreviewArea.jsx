@@ -146,7 +146,7 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 transform: `scale(${settings.padding / 100})`,
-                filter: `drop-shadow(0px 20px 40px rgba(0, 0, 0, ${settings.shadow / 100}))`,
+                willChange: 'transform',
              }}
           >
               <img 
@@ -157,6 +157,7 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
                   maxWidth: '100%',
                   maxHeight: '100%',
                   borderRadius: `${settings.borderRadius}px`,
+                  boxShadow: `0px 20px 40px rgba(0, 0, 0, ${settings.shadow / 100})`,
                 }}
               />
           </div>
