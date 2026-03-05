@@ -85,26 +85,26 @@ const PreviewArea = ({ settings, image, onUpdateSettings, captureRef }) => {
       <div className="absolute top-4 right-4 md:top-8 md:right-8 z-30">
         <button 
           onClick={() => setShowRatioMenu(!showRatioMenu)}
-          className="flex items-center gap-2 px-5 py-3.5 md:px-4 md:py-2 rounded-xl md:rounded-lg transition md:w-48 justify-between backdrop-blur-sm"
+          className="flex items-center gap-2 px-4 py-2.5 md:px-4 md:py-2 rounded-xl md:rounded-lg transition md:w-48 justify-between backdrop-blur-sm"
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.05)', 
             border: '1px solid rgba(255, 255, 255, 0.1)',  
           }}
         >
-          <div className="text-lg md:text-[13px]" style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 500, color: '#FFFFFF' }}>
+          <div className="text-sm md:text-[13px]" style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 500, color: '#FFFFFF' }}>
              <span>{currentRatio.name} </span>
              <span style={{ opacity: 0.4 }} className="md:inline">{currentRatio.sub}</span>
           </div>
-          <svg className={`w-5 h-5 md:w-4 md:h-4 text-white transition-transform ${showRatioMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+          <svg className={`w-4 h-4 text-white transition-transform ${showRatioMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
         </button>
 
         {showRatioMenu && (
-          <div className="absolute top-full right-0 mt-2 w-56 md:w-48 bg-[#000000] border border-white/10 rounded-xl md:rounded-lg shadow-2xl overflow-y-auto max-h-[calc(45vh-90px)] md:max-h-none md:overflow-hidden flex flex-col z-40">
+          <div className="absolute top-full right-0 mt-2 w-48 bg-[#000000] border border-white/10 rounded-xl md:rounded-lg shadow-2xl overflow-y-auto max-h-[calc(45vh-90px)] md:max-h-none md:overflow-hidden flex flex-col z-40">
             {ratios.map((ratioItem) => (
               <button
                 key={ratioItem.value}
                 onClick={() => handleRatioChange(ratioItem.value)}
-                className={`text-left px-5 md:px-4 py-4 md:py-3 text-lg md:text-sm hover:bg-white/5 transition flex items-center gap-2 md:gap-1 ${settings.ratio === ratioItem.value ? 'text-[#FFAA01]' : 'text-gray-400'}`}
+                className={`text-left px-4 py-3 text-sm hover:bg-white/5 transition flex items-center gap-1.5 ${settings.ratio === ratioItem.value ? 'text-[#FFAA01]' : 'text-gray-400'}`}
                 style={{ fontFamily: '"DM Sans", sans-serif' }}
               >
                 <span className={settings.ratio === ratioItem.value ? 'font-medium' : ''}>{ratioItem.name}</span>
