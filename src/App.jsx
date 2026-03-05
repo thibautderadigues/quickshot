@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { toPng } from 'html-to-image';
 import LandingPage from './components/home/LandingPage';
 import PreviewArea from './components/layout/PreviewArea';
+import { trackEvent } from './lib/analytics';
 
 import imageSizeIcon from './assets/image_size.webp';
 import borderRadiusIcon from './assets/border_radius.webp';
@@ -54,9 +55,16 @@ function App() {
     ratio: 'fit'
   });
 
+  useEffect(() => {
+    trackEvent('visit');
+  }, []);
+
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    if (file) setSelectedImage(file);
+    if (file) {
+      setSelectedImage(file);
+      trackEvent('upload', { fileType: file.type, fileSize: file.size });
+    }
   };
 
   // --- EXPORT PIXEL PERFECT (Ta version qui marche) ---
@@ -100,6 +108,8 @@ function App() {
         link.download = 'quickshot.png';
         link.href = dataUrl;
         link.click();
+
+        trackEvent('export', { ratio: settings.ratio });
 
     } catch (error) {
         console.error("Export failed:", error);
